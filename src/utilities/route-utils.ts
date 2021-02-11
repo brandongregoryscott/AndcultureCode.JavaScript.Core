@@ -1,4 +1,4 @@
-import QueryString, { StringifyOptions } from "query-string";
+import QueryStringModule, { StringifyOptions } from "query-string";
 import { QueryStringArrayFormat } from "../enumerations/query-string-array-format";
 
 // -----------------------------------------------------------------------------------------
@@ -43,7 +43,7 @@ const appendQueryParams = (
         options = { ...options, arrayFormatSeparator };
     }
 
-    const queryString = QueryString.stringify(queryParams, options);
+    const queryString = QueryString().stringify(queryParams, options);
 
     // If no query string could be parsed from the given query params, return the unmodified path.
     if (queryString.length === 0) {
@@ -104,7 +104,7 @@ const queryStringToObject = <T>(
     parseNumbers: boolean = true,
     parseBooleans: boolean = true
 ): T =>
-    (QueryString.parse(queryString, {
+    (QueryString().parse(queryString, {
         arrayFormat,
         parseNumbers,
         parseBooleans,
@@ -136,6 +136,9 @@ const replacePathParams = (path: string, pathParams: any) => {
         return a;
     });
 };
+
+const QueryString = (): typeof QueryStringModule =>
+    require("query-string") as typeof QueryStringModule;
 
 // #endregion Private Methods
 
